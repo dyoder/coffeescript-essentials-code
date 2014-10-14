@@ -1,0 +1,100 @@
+doctype html
+html(lang='en')
+
+  head
+    link(rel='stylesheet' type='text/css' href='/playground.css')
+    script(type='text/javascript' src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js')
+    script(type='text/javascript' src='http://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.7.1/coffee-script.min.js')
+    script(type='text/coffeescript').
+      counter = 0
+      compile = (s) ->
+        {js, v3SourceMap} = CoffeeScript.compile s,
+          bare: on
+          sourceMap: on
+          filename: "playground.js"
+        sourceMap = JSON.parse v3SourceMap
+        sourceMap.sourcesContent = [s]
+        sourceMap.sources = ["playground-\#{counter++}.coffee"]
+        sourceMap.file = "playground.js"
+        data = btoa JSON.stringify sourceMap
+        dataURI = "data:application/json;charset=utf-8;base64,\#{data}"
+        "\#{js}\n//# sourceMappingURL=\#{dataURI}"
+
+      $ ->
+
+        dom =
+          cs: $(".cs textarea")
+          js: $(".js textarea")
+          run: $(".run.button")
+          clear: $(".clear.button")
+          console: $(".console textarea")
+          error: $(".error")
+
+        code =
+          cs: -> dom.cs.val()
+          js: (s) ->
+            if s? then dom.js.val(s) else dom.js.val()
+
+        log = (s) ->
+          dom.console.val(dom.console.val() + s + "\n")
+
+        error =
+          show: (e) ->
+            message = if e.stack?
+              e.stack.split("\n")[0..1]
+            else
+              e.toString()
+            dom.error.find("p").html(message)
+            dom.error.show()
+          hide: ->
+            dom.error.hide()
+
+        dom.cs.keyup ->
+
+          error.hide()
+
+          try
+            code.js(compile(code.cs()))
+          catch {location, message}
+            if location?
+              error.show "Error on line \#{location.first_line + 1}: \#{message}"
+
+        dom.run.click ->
+          try
+            log(eval(code.js()))
+          catch e
+            error.show(e)
+
+        dom.clear.click ->
+          dom.console.val("")
+
+  body
+
+    h1 CoffeeScript Playground
+
+    .cs
+
+      h2 CoffeeScript
+
+      .run.button
+        label Run
+
+      textarea
+
+    .js
+
+      h2 JavaScript
+
+      textarea(disabled=true)
+
+    .console
+
+      h2 Console
+
+      .clear.button
+        label Clear
+
+      textarea(disabled=true)
+
+    .error
+      p

@@ -1,0 +1,40 @@
+doctype html
+html(lang='en')
+
+  head
+    link(rel='stylesheet' type='text/css' href='/playground.css')
+    script(type='text/javascript' src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js')
+    script(type='text/javascript' src='http://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.7.1/coffee-script.min.js')
+    script(type='text/coffeescript').
+      # Code will go here
+
+  body
+
+    h1 CoffeeScript Playground
+
+    .cs
+
+      h2 CoffeeScript
+
+      .run.button
+        label Run
+
+      textarea
+
+    .js
+
+      h2 JavaScript
+
+      textarea(disabled=true)
+
+    .console
+
+      h2 Console
+
+      .clear.button
+        label Clear
+
+      textarea(disabled=true)
+
+    .error
+      p

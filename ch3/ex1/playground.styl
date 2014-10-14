@@ -1,0 +1,56 @@
+body
+  font-family sans-serif
+  margin 2rem
+
+.cs, .js, .error, .console
+  width 45%
+  display inline-block
+  margin-right 2rem
+
+  h2, .button
+    display inline-block
+    margin-right 1rem
+    vertical-align middle
+
+  textarea
+    height 20rem
+    width 100%
+    border none
+    background #fcfcfc
+    font-family monospace
+    padding 0.5rem
+    font-size 1.5rem
+
+.console
+  width calc(90% + 3rem)
+
+  textarea
+    height 8rem
+
+.error
+  display: none
+  margin-top 1rem
+  width calc(90%+3rem)
+  background-color #c99
+  padding 0.5rem
+  border-radius 0.25rem
+  height 3rem
+
+  p
+    color #933
+
+.button
+  width 4rem
+  border-radius 0.25rem
+  border 1px solid #282
+  padding 0.5rem
+  color #282
+  background #ada
+  font-weight bold
+  text-align center
+
+  &:hover
+    background #ada
+
+  label
+    color #393
