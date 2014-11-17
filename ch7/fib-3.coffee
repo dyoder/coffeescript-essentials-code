@@ -1,16 +1,16 @@
 assert = require "assert"
 
-make_fib = ->
+fib = do (make_generator=null) ->
+  make_generator = (n) ->
+    do (s=[1, 1], i=0) ->
+      next: ->
+        s.push s[0] + s[1]
+        value: s.shift(), done: (++i == n)
 
-  values = [1, 1]
+  (n) ->
+    do (generator=null, done=false) ->
+      generator = make_generator(n)
+      {value, done} = generator.next() until done
+      value
 
-  next: ->
-    values.push values[0] + values[1]
-    value: values.shift(), done:false
-
-
-fib = do (_fib = make_fib()) ->
-  -> _fib.next().value
-
-[_..., last] = (fib() for i in [1..6])
-assert.equal last, 8
+assert.equal (fib 6), 8

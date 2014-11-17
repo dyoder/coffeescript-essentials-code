@@ -1,20 +1,18 @@
 assert = require "assert"
 
-fib = (n, callback) ->
-  _fib = do (s=[1, 1]) ->
-    ->
-      s.push s[0] + s[1]
-      s.shift()
+fib = do (make_generator=null) ->
+  make_generator = ->
+    do (s=[1, 1]) ->
+      ->
+        s.push s[0] + s[1]
+        s.shift()
 
-  _next = ->
-    if --n > 0
-      _fib()
-      setImmediate _next
-    else
-      callback _fib()
+  (n) ->
+    do (generator=null) ->
+      generator = make_generator()
+      for i in [1..n]
+        value = generator()
+      value
 
-  _next()
-
-
-fib 6, (r) ->
-  assert.equal r, 8
+assert.equal (fib 6), 8
+assert.equal (fib 6), 8

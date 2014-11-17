@@ -1,9 +1,14 @@
 assert = require "assert"
 
-fib = do (s=[1, 1]) ->
-  ->
-    s.push s[0] + s[1]
-    s.shift()
+fib = do (generator=null)->
+  generator = do (s=[1, 1]) ->
+    ->
+      s.push s[0] + s[1]
+      s.shift()
 
-[_..., last] = (fib() for i in [1..6])
-assert.equal last, 8
+  (n) ->
+    for i in [1..n]
+      value = generator()
+    value
+
+assert.equal (fib 6), 8
