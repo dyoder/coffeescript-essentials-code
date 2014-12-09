@@ -1,0 +1,9 @@
+{
+  "name": "chapter-08",
+  "description": "",
+  "author": "Dan Yoder <dan@pandastrike.com>",
+  "license": "MIT",
+  "dependencies": {
+    "when": "^3.6.3"
+  }
+}
